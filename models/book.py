@@ -31,6 +31,16 @@ class BookModel(db.Model):
         backref=db.backref('books', lazy=True)
     )
 
+    @classmethod
+    def find_by_author(cls, auth_id):
+        auth = AuthorModel.find_by_id(auth_id)
+        return cls.query.filter(cls.authors.contains(auth)).all()
+
+    @classmethod
+    def find_by_category(cls, cat_id):
+        category = CategoryModel.find_by_id(cat_id)
+        return cls.query.filter(cls.categories.contains(category)).all()
+
     def add_author(self, author):
         self.authors.append(author)
         db.session.commit()

@@ -1,6 +1,45 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container">
+    <div class="row">
+      <div class="col">
+        <form method="POST">
+          <label for="authSelect">
+            Filter by author name:
+          </label>
+          <select
+            class="form-control"
+            name="author_id"
+            id="authSelect"
+            onchange="this.form.submit()">
+            <option selected>Choose author</option>
+            {% for author in authors %}
+            <option type="submit" value="{{author.id}}">{{author.name}}</option>
+            {% endfor %}
+          </select>
+        </form>
+      </div>
+      <div class="col">
+        <form method='POST'>
+          <label for="catSelect">
+            Filter by category:
+          </label>
+          <select
+            class="form-control"
+            name="category_id"
+            id="catSelect"
+            onchange="this.form.submit()">
+            <option selected>Choose category</option>
+            {% for category in categories %}
+            <option type="submit" value="{{category.id}}">{{category.name}}</option>
+            {% endfor %}
+          </select>
+        </form>
+      </div>
+    </div>
+</div>
+<br>
+<div class="container">
   <table class="table table-hover">
     <t-head>
       <tr>

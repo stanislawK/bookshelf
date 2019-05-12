@@ -36,8 +36,23 @@ def add_book():
     return 'hello world'
 
 
-@books_blueprint.route('/books', methods=['GET'])
+@books_blueprint.route('/books', methods=['GET', 'POST'])
 def books():
     books = BookModel.query.all()
+    authors = AuthorModel.query.all()
+    categories = CategoryModel.query.all()
 
-    return render_template('books.html', books=books)
+    author = request.form.get('author_id')
+    category = request.form.get('category_id')
+
+    # Filter books by author
+    if request.method == 'POST' and author:
+        books = BookModel.find_by_author(author)
+
+    if request.method == 'POST' and category:
+        books = BookModel.find_by_category(category)
+
+    return render_template('books.html',
+                           books=books,
+                           authors=authors,
+                           categories=categories)
