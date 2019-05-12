@@ -17,7 +17,7 @@ def create_app():
 
 def initialize_extensions(app):
     db.init_app(app)
-    migrate.init_app(app)
+    migrate.init_app(app, db)
 
 
 def register_blueprints(app):
