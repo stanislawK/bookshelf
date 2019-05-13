@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% from "_formhelpers.html" import render_field %}
+{% block content %}
+<div class="container">
+    <div class="card">
+      <div class="card-header bg-secondary text-white">
+          <strong>Add new book</strong>
+      </div>
+      <div class="card-body">
+        <form method="POST">
+          {{ form.csrf_token }}
+          {{ render_field(form.title, class="col-sm-5") }}
+          {{ render_field(form.description, class="col-sm-5") }}
+          {{ render_field(form.authors, class="col-sm-5") }}
+          {{ render_field(form.categories, class="col-sm-5") }}
+          <hr />
+            <button
+            class="btn btn-md btn-primary"
+            type="submit"
+            style="padding:0.5em 2em;margin-left:5%;">Save</button>
+          </form>
+      </div>
+    </div>
+</div>
+{% endblock %}
