@@ -1,7 +1,7 @@
 from flask import Flask
 
 from bookshelf.extensions import db, migrate
-from bookshelf.blueprints import books
+from bookshelf.blueprints import book, books
 
 
 def create_app():
@@ -21,4 +21,5 @@ def initialize_extensions(app):
 
 
 def register_blueprints(app):
+    app.register_blueprint(book.book_blueprint)
     app.register_blueprint(books.books_blueprint)

@@ -8,6 +8,10 @@ class CategoryModel(db.Model):
     name = db.Column(db.String(50), nullable=False)
 
     @classmethod
+    def find_by_name(cls, _name):
+        return cls.query.filter_by(name=_name).first()
+
+    @classmethod
     def find_by_id(cls, _id):
         return cls.query.filter_by(id=_id).first()
 
