@@ -5,17 +5,17 @@ from wtforms import FieldList, StringField, TextAreaField, validators
 class BookForm(FlaskForm):
     title = StringField('Title', [
         validators.Length(max=50),
-        validators.DataRequired()
+        validators.DataRequired('Title is required')
     ])
     description = TextAreaField('Description', [
         validators.Length(min=5, max=200),
-        validators.DataRequired()
+        validators.DataRequired('Description is required')
     ])
-    authors = StringField('Author', [
+    authors = FieldList(StringField('Author', [
         validators.Length(max=50),
-        validators.DataRequired()
-    ])
+        validators.DataRequired('You have to provide at least one author')
+    ]), min_entries=1)
     categories = StringField('Category', [
         validators.Length(max=50),
-        validators.DataRequired()
+        validators.DataRequired('You have to provide at least one category')
     ])
