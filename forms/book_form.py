@@ -15,7 +15,7 @@ class BookForm(FlaskForm):
         validators.Length(max=50),
         validators.DataRequired('You have to provide at least one author')
     ]), min_entries=1)
-    categories = StringField('Category', [
+    categories = FieldList(StringField('Category', [
         validators.Length(max=50),
         validators.DataRequired('You have to provide at least one category')
-    ])
+    ]), min_entries=1)
