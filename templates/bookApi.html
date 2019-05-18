@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% from "_formhelpers.html" import render_field %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-sm-6 col-md-8">
+      <h1>Google API</h1>
+      <div class="form-group">
+        <form method="POST" action="{{url_for('book_api.add_book_api')}}">
+          <input type="text" class="form-control" name="keyWord" aria-describedby="keyHelp" placeholder="Keyword">
+          <small id="keyHelp" class="form-text text-muted">Provide keyword releted to the book</small>
+          <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% if new_book %}
+<div class="row">
+  <p>{{new_book.title}}</p>
+</div>
+<div class="row">
+  <p>{{new_book.description}}</p>
+</div>
+<div class="row">
+  <p>{{new_book.authors}}</p>
+</div>
+<div class="row">
+  <p>{{new_book.categories}}</p>
+</div>
+{% endif %}
+
+{% endblock %}

@@ -4,3 +4,4 @@ Flask-Migrate==2.4.0
 pytest==4.5.0
 psycopg2==2.8.2
 Flask-WTF==0.14.2
+requests==2.22.0
