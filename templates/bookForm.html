@@ -5,14 +5,27 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script type="text/javascript">
     var authors = 1
-    $(function somefunc() {
-      $("a#process_input").bind('click', function(event) {
+    var categories = 1
+    $(function addAuth() {
+      $("a#add_auth").bind('click', function(event) {
         $.getJSON('/_add-author/'+authors, function(data) {
           var auth = authors + 1
-          $('#result').append('<div class="form-group form-inline"><label class="col-sm-2">Author '
+          $('#author').append('<div class="form-group form-inline"><label class="col-sm-2">Author '
             + auth +'</label>'
             + data.new_row + "</div>")
             authors++
+        });
+        return false
+      });
+    });
+    $(function addCategory() {
+      $("a#add_cat").bind('click', function(event) {
+        $.getJSON('/_add-category/'+categories, function(data) {
+          var cat = categories + 1
+          $('#category').append('<div class="form-group form-inline"><label class="col-sm-2">Category '
+            + cat +'</label>'
+            + data.new_row + "</div>")
+            categories++
         });
         return false
       });
@@ -31,15 +44,24 @@
           {{ render_field(book_form.description, class="col-sm-5") }}
           {% for author in book_form.authors.entries %}
           {{ render_field(author, class="col-sm-5") }}
-          <span id=result></span>
+          <span id=author></span>
           {% endfor %}
-          <a href='#' id=process_input>
+          <a href='#' id=add_auth>
             <button
             type="button"
             class="btn btn-outline-success btn-sm"
             style="margin-left:5%;margin-bottom:2%">Add author</button>
           </a>
-          {{ render_field(book_form.categories, class="col-sm-5") }}
+          {% for category in book_form.categories.entries %}
+          {{ render_field(category, class="col-sm-5") }}
+          <span id=category></span>
+          {% endfor %}
+          <a href='#' id=add_cat>
+            <button
+            type="button"
+            class="btn btn-outline-success btn-sm"
+            style="margin-left:5%;margin-bottom:2%">Add category</button>
+          </a>
           <hr />
             <button
             class="btn btn-md btn-primary"
@@ -48,9 +70,6 @@
           </form>
       </div>
     </div>
-    {% if add_auth%}
-    <h1>test</h1>
-    {% endif %}
 </div>
 <script>
   $('#add_auth')
