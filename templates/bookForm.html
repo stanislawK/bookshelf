@@ -1,6 +1,24 @@
 {% extends 'base.html' %}
 {% from "_formhelpers.html" import render_field %}
 {% block content %}
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    var authors = 1
+    $(function somefunc() {
+      $("a#process_input").bind('click', function(event) {
+        $.getJSON('/_add-author/'+authors, function(data) {
+          var auth = authors + 1
+          $('#result').append('<div class="form-group form-inline"><label class="col-sm-2">Author '
+            + auth +'</label>'
+            + data.new_row + "</div>")
+            authors++
+        });
+        return false
+      });
+    });
+  </script>
+</head>
 <div class="container">
     <div class="card">
       <div class="card-header bg-secondary text-white">
@@ -8,11 +26,20 @@
       </div>
       <div class="card-body">
         <form method="POST">
-          {{ form.csrf_token }}
-          {{ render_field(form.title, class="col-sm-5") }}
-          {{ render_field(form.description, class="col-sm-5") }}
-          {{ render_field(form.authors, class="col-sm-5") }}
-          {{ render_field(form.categories, class="col-sm-5") }}
+          {{ book_form.csrf_token }}
+          {{ render_field(book_form.title, class="col-sm-5") }}
+          {{ render_field(book_form.description, class="col-sm-5") }}
+          {% for author in book_form.authors.entries %}
+          {{ render_field(author, class="col-sm-5") }}
+          <span id=result></span>
+          {% endfor %}
+          <a href='#' id=process_input>
+            <button
+            type="button"
+            class="btn btn-outline-success btn-sm"
+            style="margin-left:5%;margin-bottom:2%">Add author</button>
+          </a>
+          {{ render_field(book_form.categories, class="col-sm-5") }}
           <hr />
             <button
             class="btn btn-md btn-primary"
@@ -21,5 +48,11 @@
           </form>
       </div>
     </div>
+    {% if add_auth%}
+    <h1>test</h1>
+    {% endif %}
 </div>
+<script>
+  $('#add_auth')
+</script>
 {% endblock %}
