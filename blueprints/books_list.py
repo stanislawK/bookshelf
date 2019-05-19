@@ -4,9 +4,10 @@ from bookshelf.models.author import AuthorModel
 from bookshelf.models.book import BookModel
 from bookshelf.models.category import CategoryModel
 
-books_blueprint = Blueprint('books_list',
-                            __name__,
-                            template_folder='templates')
+books_blueprint = Blueprint(
+    'books_list',
+    __name__,
+    template_folder='templates')
 
 
 @books_blueprint.route('/books', methods=['GET', 'POST'])

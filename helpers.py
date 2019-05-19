@@ -1,4 +1,4 @@
-import json
+from flask import session
 
 from bookshelf.models.author import AuthorModel
 from bookshelf.models.book import BookModel
@@ -28,3 +28,20 @@ def save_all_books(books):
                 category_db = CategoryModel(name=category)
                 category_db.save_to_db()
             new_book.add_category(category_db)
+
+
+def create_books_dict(books):
+    for item in books.get('items'):
+        book = item['volumeInfo']
+        title = book.get('title')
+        description = book.get('description', 'Unknown')
+        authors = book.get('authors', ['Unknown'])
+        categories = book.get('categories', ['Unknown'])
+
+        new_book = {
+            "title": title,
+            "description": description,
+            "authors": authors,
+            "categories": categories
+        }
+        session['new_books'].append(new_book)
