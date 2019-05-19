@@ -1,40 +1,6 @@
 {% extends 'base.html' %}
 {% set page_id = 'books_api' %}
 {% block content %}
-<head>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script type="text/javascript">
-    var books = []
-    {%if new_books%}
-      {% for book in new_books %}
-        books.push("{{book}}")
-      {% endfor %}
-    {% endif %}
-    $(function saveAll() {
-      console.log(books)
-      $("a#save_all").bind('click', function(event) {
-        $.ajax({type:'POST',
-               url:'/_add_all_books/',
-               contentType: 'application/json',
-               data: JSON.stringify(books),
-               dataType: 'JSON'});
-        return false
-      });
-    });
-    $(function addCategory() {
-      $("a#add_cat").bind('click', function(event) {
-        $.getJSON('/_add-category/'+categories, function(data) {
-          var cat = categories + 1
-          $('#category').append('<div class="form-group form-inline"><label class="col-sm-2">Category '
-            + cat +'</label>'
-            + data.new_row + "</div>")
-            categories++
-        });
-        return false
-      });
-    });
-  </script>
-</head>
 <div class="container">
   <div class="row">
     <div class="col-12 col-sm-6 col-md-8">
@@ -62,9 +28,6 @@
         <input type="hidden" name="save_all" value="all" />
         <button type="submit" class="btn btn-outline-success">Save all</button>
       </form>
-      <!-- <a href='#' id=save_all>
-        <button type="button" class="btn btn-outline-success">Save all</button>
-      </a> -->
       <table class="table table-hover" style=margin-top:2%;>
         <t-head>
           <tr>
