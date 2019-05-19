@@ -19,7 +19,7 @@ class BookModel(db.Model):
     __tablename__ = "books"
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(50), nullable=False)
+    title = db.Column(db.String(300), nullable=False)
     description = db.Column(db.Text, nullable=False)
     authors = db.relationship(
         "AuthorModel",
