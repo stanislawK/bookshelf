@@ -1,4 +1,4 @@
 __pycache__/
 .pytest_cache/
 *.pyc
-.flask_sessionstore/
+flask_sessionstore/
