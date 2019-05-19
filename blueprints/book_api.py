@@ -1,4 +1,11 @@
-from flask import Blueprint, flash, render_template, redirect, request, url_for
+from flask import (
+                    Blueprint,
+                    flash,
+                    render_template,
+                    redirect,
+                    request,
+                    url_for,
+                    session)
 import requests
 from sqlalchemy.exc import DataError
 
@@ -10,7 +17,7 @@ from bookshelf.models.category import CategoryModel
 book_api = Blueprint('book_api', __name__, template_folder='templates')
 base_url = "https://www.googleapis.com/books/v1/volumes"
 
-new_books = []
+
 @book_api.route('/book/add/api', methods=['GET', 'POST'])
 def add_book_api():
     key = request.form.get('keyWord')
@@ -21,6 +28,7 @@ def add_book_api():
         params = {'q': key}
         r = requests.get(base_url, params=params)
         books = r.json()
+        session['new_books'] = []
 
         if books.get('items'):
             for item in books.get('items'):
@@ -36,19 +44,42 @@ def add_book_api():
                     "authors": authors,
                     "categories": categories
                 }
-                new_books.append(new_book)
-            return render_template('bookApi.html', new_books=new_books)
-    return render_template('bookApi.html')
+                session['new_books'].append(new_book)
+            return render_template('bookApi.html',
+                                   new_books=session['new_books'])
+    return render_template('bookApi.html', new_books=session.get('new_books'))
 
 
 @book_api.route('/_add_all_books/', methods=['GET', 'POST'])
 def add_books_api():
     try:
-        save_all_books(new_books)
-        flash('{} books successfully added'.format(len(new_books)),
+        books = session.get('new_books')
+        save_all_books(books)
+        flash('{} books successfully added'.format(len(books)),
               'success')
-        new_books = []
-    except DataError:
+        session.pop('new_books', None)
+    except (DataError, TypeError):
+        session.pop('new_books', None)
         flash('At least one of books has invalid data', 'danger')
         return redirect(url_for('book_api.add_book_api'))
+    return redirect(url_for('book_api.add_book_api'))
+
+
+@book_api.route('/_add_selected_books/', methods=['GET', 'POST'])
+def add_seleced_books_api():
+    selected_id = request.form.getlist("selected")
+    if selected_id:
+        selected_id = [int(id)-1 for id in selected_id]
+        selected_books = [session.get('new_books')[id] for id in selected_id]
+        try:
+            save_all_books(selected_books)
+            flash('{} books successfully added'.format(len(selected_books)),
+                  'success')
+            for id in sorted(selected_id, reverse=True):
+                del session.get('new_books')[id]
+        except (DataError, TypeError):
+            session.pop('new_books', None)
+            flash('At least one of books has invalid data', 'danger')
+            return redirect(url_for('book_api.add_book_api'))
+
     return redirect(url_for('book_api.add_book_api'))
