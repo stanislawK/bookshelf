@@ -24,40 +24,53 @@
   <div class="row">
     <div class="col-12 col-sm-6 col-md-8">
       <h5>Results:</h5>
-      <form method="POST" action="/_add_all_books/">
+      <button type="submit" form="form_all" class="btn btn-outline-success">Save all</button>
+      <button type="submit" form="form_selected" class="btn btn-outline-success">Save selected</button>
+      <form id="form_all" method="POST" action="/_add_all_books/">
         <input type="hidden" name="save_all" value="all" />
-        <button type="submit" class="btn btn-outline-success">Save all</button>
       </form>
-      <table class="table table-hover" style=margin-top:2%;>
-        <t-head>
-          <tr>
-              <th scope="col">ID</th>
-              <th scope="col">Title</th>
-              <th scope="col">Authors</th>
-              <th scope="col">Categories</th>
-              <th scope="col"></th>
-          </tr>
-        </t-head>
-        <t-body>
-          {% for book in new_books %}
-          <tr>
-              <td>{{loop.index}}</td>
-              <td>{{book.title}}</td>
-              <td>
-                {% for autor in book.authors %}
-                  {{autor}}
-                {% endfor %}
-              </td>
-              <td>
-                {% for category in book.categories %}
-                  {{category}}
-                {% endfor %}
-              </td>
-              <td></td>
-          </tr>
-          {% endfor %}
-        </t-body>
-      </table>
+      <form id="form_selected" method="POST" action="/_add_selected_books/">
+        <table class="table table-hover" style=margin-top:2%;>
+          <t-head>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Title</th>
+                <th scope="col">Authors</th>
+                <th scope="col">Categories</th>
+                <th scope="col">Select</th>
+            </tr>
+          </t-head>
+          <t-body>
+            {% for book in new_books %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>{{book.title}}</td>
+                <td>
+                  {% for autor in book.authors %}
+                    {{autor}}
+                  {% endfor %}
+                </td>
+                <td>
+                  {% for category in book.categories %}
+                    {{category}}
+                  {% endfor %}
+                </td>
+                <td>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input position-static"
+                      type="checkbox"
+                      id="blankCheckbox"
+                      name="selected"
+                      value="{{loop.index}}"
+                      aria-label="...">
+                  </div>
+                </td>
+            </tr>
+            {% endfor %}
+          </t-body>
+        </table>
+      </form>
     </div>
   </div>
 </div>
