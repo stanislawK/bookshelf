@@ -3,39 +3,64 @@
 {% block content %}
 <div class="container">
     <div class="row">
-      <div class="col">
-        <form method="POST">
-          <label for="authSelect">
-            Filter by author name:
-          </label>
-          <select
+      <div class="col-12 col-sm-6 col-md-8">
+        <h1>Filter books</h1>
+        <div class="form-group">
+          <form method="POST">
+            <label for="authSelect">
+              Filter by authors name:
+            </label>
+            <select
             class="form-control"
             name="author_id"
             id="authSelect"
             onchange="this.form.submit()">
-            <option selected>Choose author</option>
+            <option>Choose author</option>
             {% for author in authors %}
-            <option type="submit" value="{{author.id}}">{{author.name}}</option>
+            <option
+              type="submit"
+              value="{{author.id}}"
+              {% if select=="%s%s"|format("a",author.id) %}
+              selected='selected'
+              {% endif %}>
+              {{author.name}}
+            </option>
             {% endfor %}
-          </select>
-        </form>
-      </div>
-      <div class="col">
-        <form method='POST'>
-          <label for="catSelect">
-            Filter by category:
-          </label>
-          <select
+            </select>
+          </form>
+
+          <form method='POST'>
+            <label for="catSelect" style="margin-top:2%;">
+              Filter by category:
+            </label>
+            <select
             class="form-control"
             name="category_id"
             id="catSelect"
             onchange="this.form.submit()">
             <option selected>Choose category</option>
             {% for category in categories %}
-            <option type="submit" value="{{category.id}}">{{category.name}}</option>
+            <option
+              type="submit"
+              value="{{category.id}}"
+              {% if select=="%s%s"|format("c",category.id) %} selected="selected" {% endif %}>
+              {{category.name}}
+            </option>
             {% endfor %}
-          </select>
-        </form>
+            </select>
+          </form>
+
+          <form id="clear" method="POST"">
+            <input type="hidden" name="clear" value="all" />
+            <button
+            type="submit"
+            form="clear"
+            class="btn btn-outline-danger"
+            style="margin-top:2%;">
+            Clear filters
+            </button>
+          </form>
+        </div>
       </div>
     </div>
 </div>
