@@ -1,6 +1,6 @@
 from flask import Flask
 
-from bookshelf.extensions import db, migrate
+from bookshelf.extensions import db, migrate, sess
 from bookshelf.blueprints import book_api, book_form, books_list
 
 
@@ -18,6 +18,7 @@ def create_app():
 def initialize_extensions(app):
     db.init_app(app)
     migrate.init_app(app, db)
+    sess.init_app(app)
 
 
 def register_blueprints(app):

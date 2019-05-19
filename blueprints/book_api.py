@@ -28,6 +28,7 @@ def add_book_api():
         params = {'q': key}
         r = requests.get(base_url, params=params)
         books = r.json()
+        session.clear()
         session['new_books'] = []
 
         if books.get('items'):
@@ -57,9 +58,9 @@ def add_books_api():
         save_all_books(books)
         flash('{} books successfully added'.format(len(books)),
               'success')
-        session.pop('new_books', None)
+        session.clear()
     except (DataError, TypeError):
-        session.pop('new_books', None)
+        session.clear()
         flash('At least one of books has invalid data', 'danger')
         return redirect(url_for('book_api.add_book_api'))
     return redirect(url_for('book_api.add_book_api'))
@@ -67,18 +68,20 @@ def add_books_api():
 
 @book_api.route('/_add_selected_books/', methods=['GET', 'POST'])
 def add_seleced_books_api():
+    import pdb; pdb.set_trace()
     selected_id = request.form.getlist("selected")
     if selected_id:
-        selected_id = [int(id)-1 for id in selected_id]
-        selected_books = [session.get('new_books')[id] for id in selected_id]
+        selected_id = [int(id) for id in selected_id]
+        all_books = session.get('new_books')
+        selected_books = [all_books[id] for id in selected_id]
         try:
             save_all_books(selected_books)
             flash('{} books successfully added'.format(len(selected_books)),
                   'success')
             for id in sorted(selected_id, reverse=True):
                 del session.get('new_books')[id]
-        except (DataError, TypeError):
-            session.pop('new_books', None)
+        except (DataError, TypeError, AttributeError):
+            session.clear()
             flash('At least one of books has invalid data', 'danger')
             return redirect(url_for('book_api.add_book_api'))
 
