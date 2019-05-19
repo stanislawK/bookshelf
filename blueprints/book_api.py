@@ -9,7 +9,7 @@ from flask import (
 import requests
 from sqlalchemy.exc import DataError
 
-from bookshelf.helpers import save_all_books
+from bookshelf.helpers import save_all_books, create_books_dict
 from bookshelf.models.author import AuthorModel
 from bookshelf.models.book import BookModel
 from bookshelf.models.category import CategoryModel
@@ -25,30 +25,43 @@ def add_book_api():
 
     if request.method == 'POST' and key:
         # Sending request to google API with key from user
-        params = {'q': key}
+        params = {'q': key,
+                  'printType': 'books'}
         r = requests.get(base_url, params=params)
         books = r.json()
         session.clear()
         session['new_books'] = []
+        session['keyword'] = key
 
         if books.get('items'):
-            for item in books.get('items'):
-                book = item['volumeInfo']
-                title = book.get('title')
-                description = book.get('description', 'Unknown')
-                authors = book.get('authors', ['Unknown'])
-                categories = book.get('categories', ['Unknown'])
+            create_books_dict(books)
 
-                new_book = {
-                    "title": title,
-                    "description": description,
-                    "authors": authors,
-                    "categories": categories
-                }
-                session['new_books'].append(new_book)
             return render_template('bookApi.html',
                                    new_books=session['new_books'])
     return render_template('bookApi.html', new_books=session.get('new_books'))
+
+
+@book_api.route('/_load_more_books/', methods=['GET', 'POST'])
+def load_more_books():
+    more = request.form.get('load_more')
+    key = session.get('keyword')
+    books_now = len(session.get('new_books'))
+
+    if more and key and books_now < 40:
+        results = books_now + 10
+        params = {'q': key,
+                  'printType': 'books',
+                  'maxResults': results}
+        r = requests.get(base_url, params=params)
+        books = r.json()
+        session['new_books'] = []
+
+        # Create dictionary with books, and save it into session
+        if books.get('items'):
+            create_books_dict(books)
+
+        return redirect(url_for('book_api.add_book_api'))
+    return redirect(url_for('book_api.add_book_api'))
 
 
 @book_api.route('/_add_all_books/', methods=['GET', 'POST'])
@@ -68,7 +81,6 @@ def add_books_api():
 
 @book_api.route('/_add_selected_books/', methods=['GET', 'POST'])
 def add_seleced_books_api():
-    import pdb; pdb.set_trace()
     selected_id = request.form.getlist("selected")
     if selected_id:
         selected_id = [int(id) for id in selected_id]

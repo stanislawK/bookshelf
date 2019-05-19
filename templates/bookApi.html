@@ -71,6 +71,12 @@
           </t-body>
         </table>
       </form>
+      {% if new_books|length < 40 %}
+      <form class="" action="/_load_more_books/" method="POST">
+        <input type="hidden" name="load_more" value="10" />
+        <button type="submit" class="btn btn-primary">Load more ...</button>
+      </form>
+      {% endif %}
     </div>
   </div>
 </div>
