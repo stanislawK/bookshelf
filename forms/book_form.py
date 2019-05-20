@@ -8,7 +8,7 @@ class BookForm(FlaskForm):
         validators.DataRequired('Title is required')
     ])
     description = TextAreaField('Description', [
-        validators.Length(min=5, max=200),
+        validators.Length(min=5, max=1000),
         validators.DataRequired('Description is required')
     ])
     authors = FieldList(StringField('Author', [

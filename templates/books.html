@@ -15,7 +15,7 @@
             name="author_id"
             id="authSelect"
             onchange="this.form.submit()">
-            <option>Choose author</option>
+            <option value="">Choose author</option>
             {% for author in authors %}
             <option
               type="submit"
@@ -38,7 +38,7 @@
             name="category_id"
             id="catSelect"
             onchange="this.form.submit()">
-            <option selected>Choose category</option>
+            <option value="">Choose category</option>
             {% for category in categories %}
             <option
               type="submit"
