@@ -46,26 +46,6 @@ def add_book_api():
 
             return render_template('bookApi.html',
                                    new_books=session['new_books'])
-        # elif request.method == 'POST' and title or author:
-        #     # Sending request to google API with advaced searchin key
-        #     if title:
-        #         key = "{}+intitle".format(title)
-        #     else:
-        #         key = "{}+inauthor".format(author)
-        #     params = {'q': key,
-        #               'printType': 'books'}
-        #     r = requests.get(base_url, params=params)
-        #     books = r.json()
-        #     session.clear()
-        #     session['new_books'] = []
-        #     session['keyword'] = key
-        #
-        #     if books.get('items'):
-        #         create_books_dict(books)
-        #
-        #         return render_template('bookApi.html',
-        #                                new_books=session['new_books'])
-
     return render_template('bookApi.html',
                            new_books=session.get('new_books'),
                            advanced=advanced)
