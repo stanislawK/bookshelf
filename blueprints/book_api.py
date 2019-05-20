@@ -22,9 +22,17 @@ base_url = "https://www.googleapis.com/books/v1/volumes"
 def add_book_api():
     key = request.form.get('keyWord')
     all_books = request.form.get('save_all')
+    advanced = request.form.get('advanced')
+    title = request.form.get('keyTitle', '')
+    author = request.form.get('keyAuth', '')
 
-    if request.method == 'POST' and key:
+    if request.method == 'POST' and key or author or title:
         # Sending request to google API with key from user
+        if title:
+            key = "{}+intitle".format(title)
+        elif author:
+            key = "{}+inauthor".format(author)
+
         params = {'q': key,
                   'printType': 'books'}
         r = requests.get(base_url, params=params)
@@ -38,7 +46,29 @@ def add_book_api():
 
             return render_template('bookApi.html',
                                    new_books=session['new_books'])
-    return render_template('bookApi.html', new_books=session.get('new_books'))
+        # elif request.method == 'POST' and title or author:
+        #     # Sending request to google API with advaced searchin key
+        #     if title:
+        #         key = "{}+intitle".format(title)
+        #     else:
+        #         key = "{}+inauthor".format(author)
+        #     params = {'q': key,
+        #               'printType': 'books'}
+        #     r = requests.get(base_url, params=params)
+        #     books = r.json()
+        #     session.clear()
+        #     session['new_books'] = []
+        #     session['keyword'] = key
+        #
+        #     if books.get('items'):
+        #         create_books_dict(books)
+        #
+        #         return render_template('bookApi.html',
+        #                                new_books=session['new_books'])
+
+    return render_template('bookApi.html',
+                           new_books=session.get('new_books'),
+                           advanced=advanced)
 
 
 @book_api.route('/_load_more_books/', methods=['GET', 'POST'])

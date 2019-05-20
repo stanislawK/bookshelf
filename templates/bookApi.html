@@ -11,9 +11,21 @@
         <form method="POST" action="{{url_for('book_api.add_book_api')}}">
           <input type="text" class="form-control" name="keyWord" aria-describedby="keyHelp" placeholder="Keyword">
           <small id="keyHelp" class="form-text text-muted">Provide keyword releted to the book</small>
+          {% if advanced %}
+          <input type="text" class="form-control" name="keyTitle" aria-describedby="titleHelp" placeholder="Title">
+          <small id="titleHelp" class="form-text text-muted">Searching in titles</small>
+          <input type="text" class="form-control" name="keyAuth" aria-describedby="authHelp" placeholder="Author">
+          <small id="authHelp" class="form-text text-muted">Searching in authors</small>
+          {% endif %}
           <button type="submit" class="btn btn-primary">Search</button>
         </form>
       </div>
+      {% if not advanced %}
+      <form id="advanced" method="POST" action="{{url_for('book_api.add_book_api')}}">
+        <input type="hidden" name="advanced" value="True" />
+        <button type="submit" class="btn btn-link" form="advanced">Advanced searching</button>
+      </form>
+      {% endif %}
     </div>
   </div>
 </div>

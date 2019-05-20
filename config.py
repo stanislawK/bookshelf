@@ -22,6 +22,7 @@ class ProductionConfig(Config):
     SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get('TRACK')
     SECRET_KEY = os.environ.get('SECRET_KEY')
     SESSION_TYPE = 'filesystem'
+    PERMANENT_SESSION_LIFETIME = 900
 
 
 class DevelopmentConfig(Config):
@@ -34,3 +35,4 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = 'Secret123'
     SESSION_TYPE = 'filesystem'
+    PERMANENT_SESSION_LIFETIME = 900
